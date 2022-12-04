@@ -86,6 +86,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
 
@@ -135,6 +136,8 @@
     processOrder() {
       const thisProduct = this;
       console.log('processOrder:', thisProduct);
+
+      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
 
@@ -152,11 +155,27 @@
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
           console.log(optionId, option);
+
+          //get the selected option
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          console.log('selected?', optionSelected);
+          //find the image
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          //console.log(optionImage);
+          //add or remove class active
+          if (optionImage) {
+            if (optionSelected) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
+
           // check if there is param with a name of paramId in formData and if it includes optionId
-          if (formData[paramId] && formData[paramId].includes(optionId)) {
+          if (optionSelected) {
             // check if the option is not default
             if (!option.default) {
-              console.log('non default option:',option);
+              console.log('non default option:', option);
               // add option price to price variable
               price += option.price;
               console.log(price);
@@ -164,7 +183,7 @@
           } else {
             // check if the option is default
             if (option.default) {
-              console.log('default option:',option);
+              console.log('default option:', option);
               // reduce price variable
               price -= option.price;
             }
