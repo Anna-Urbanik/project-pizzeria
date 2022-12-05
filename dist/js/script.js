@@ -59,10 +59,12 @@
       thisProduct.data = data;
       thisProduct.renderInMenu();
       thisProduct.getElements();
+      thisWidget.setValue(thisWidget.input.value);
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
-      console.log('new Product:', thisProduct);
+      //console.log('new Product:', thisProduct);
     }
 
     renderInMenu() {
@@ -87,8 +89,8 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
-
 
     initAccordion() {
       const thisProduct = this;
@@ -97,7 +99,7 @@
       //const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       /* START: add event listener to clickable trigger on event click */
       thisProduct.accordionTrigger.addEventListener('click', function (event) {
-        console.log('clicked');
+        //console.log('clicked');
         /* prevent default action for event */
         event.preventDefault();
         /* find active product (product that has active class) */
@@ -114,7 +116,7 @@
 
     initOrderForm() {
       const thisProduct = this;
-      console.log('initOrderForm:', thisProduct);
+      //console.log('initOrderForm:', thisProduct);
 
       thisProduct.form.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -133,13 +135,14 @@
       });
     }
 
+
     processOrder() {
       const thisProduct = this;
-      console.log('processOrder:', thisProduct);
+      //console.log('processOrder:', thisProduct);
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
 
       // set price to default price
       let price = thisProduct.data.price;
@@ -148,17 +151,17 @@
       for (let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+        //console.log(paramId, param);
 
         // for every option in this category
         for (let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log(optionId, option);
+          //console.log(optionId, option);
 
           //get the selected option
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
-          console.log('selected?', optionSelected);
+          //console.log('selected?', optionSelected);
           //find the image
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
           //console.log(optionImage);
@@ -175,15 +178,15 @@
           if (optionSelected) {
             // check if the option is not default
             if (!option.default) {
-              console.log('non default option:', option);
+              //console.log('non default option:', option);
               // add option price to price variable
               price += option.price;
-              console.log(price);
+              //console.log(price);
             }
           } else {
             // check if the option is default
             if (option.default) {
-              console.log('default option:', option);
+              //console.log('default option:', option);
               // reduce price variable
               price -= option.price;
             }
@@ -194,7 +197,64 @@
         }
       }
     }
+
+    initAmountWidget() {
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    }
   }
+
+  class AmountWidget {
+    constructor(element) {
+      const thisWidget = this;
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+
+      thisWidget.getElements(element);
+    }
+
+    getElements(element) {
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value) {
+      const thisWidget = this;
+      const newValue = parseInt(value);
+
+      /* TO DO: Add validation */
+      if (thisWidget.value !== newValue && !isNaN(newValue)) {
+        thisWidget.value = newValue;
+      }
+      thisWidget.input.value = thisWidget.value;
+
+      //settings.amountWidget.defaultMin   settings.amountWidget.defaultMax
+    }
+
+    initActions() {
+      thisWidget.input.addEventListener('change', function () {
+        thisWidget.setValue(thisWidget.input.value);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value - 1);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value + 1);
+      });
+    }
+
+
+  }
+
 
 
   const app = {
@@ -203,7 +263,7 @@
       //console.log('testProduct:', testProduct);
       const thisApp = this;
 
-      console.log('thisApp.data:', thisApp.data);
+      //console.log('thisApp.data:', thisApp.data);
 
       for (let productData in thisApp.data.products) {
         new Product(productData, thisApp.data.products[productData]);
@@ -214,16 +274,16 @@
       const thisApp = this;
 
       thisApp.data = dataSource;
-      console.log(thisApp.data);
+      //console.log(thisApp.data);
     },
 
     init: function () {
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      //console.log('*** App starting ***');
+      //console.log('thisApp:', thisApp);
+      //console.log('classNames:', classNames);
+      //console.log('settings:', settings);
+      //console.log('templates:', templates);
       thisApp.initData();
       thisApp.initMenu();
     },
@@ -231,3 +291,4 @@
 
   app.init();
 }
+
