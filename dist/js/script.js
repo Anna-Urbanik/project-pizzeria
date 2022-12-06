@@ -27,7 +27,7 @@
     },
     widgets: {
       amount: {
-        input: 'input[name="amount"]',
+        input: 'input.amount', // CODE CHANGED
         linkDecrease: 'a[href="#less"]',
         linkIncrease: 'a[href="#more"]',
       },
@@ -161,7 +161,6 @@
       });
     }
 
-
     processOrder() {
       const thisProduct = this;
       //console.log('processOrder:', thisProduct);
@@ -235,8 +234,6 @@
     }
   }
 
-
-
   class AmountWidget {
     constructor(element) {
       const thisWidget = this;
@@ -292,24 +289,34 @@
 
       const event = new Event('updated');
       thisWidget.element.dispatchEvent(event);
-
-
     }
   }
 
-  class Cart{
+  class Cart {
 
-    constructor(element){
+    constructor(element) {
       const thisCart = this;
       thisCart.products = [];
       thisCart.getElements(element);
       console.log('new Cart', thisCart);
+      thisCart.initActions(element);
     }
 
-    getElements(element){
+    getElements(element) {
       const thisCart = this;
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
+
+      //NEW
+      thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+    };
+
+    initActions() {
+      const thisCart = this;
+      thisCart.dom.toggleTrigger.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+      });
     }
   }
 
@@ -333,7 +340,7 @@
       //console.log(thisApp.data);
     },
 
-    initCart: function(){
+    initCart: function () {
       const thisApp = this;
       const cartElem = document.querySelector(select.containerOf.cart);
       thisApp.cart = new Cart(cartElem);
