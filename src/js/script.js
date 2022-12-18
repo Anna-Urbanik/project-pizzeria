@@ -465,11 +465,11 @@
 
       for(let prod of thisCart.products) {
         payload.products.push(prod.getData());
-      };
+      }
 
       const options = {
         method: 'POST',
-        header: {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
@@ -551,7 +551,7 @@
         priceSingle: thisCartProduct.priceSingle,
         name: thisCartProduct.name,
         params: thisCartProduct.params,
-      }
+      };
       return cartDataSummary;
     }
   }
