@@ -20,8 +20,8 @@ class Booking {
     
     thisBooking.dom = {};
     thisBooking.dom.wrapper = element;
-    thisBooking.dom.peopleAmount = (select.booking.peopleAmount);
-    thisBooking.dom.hoursAmount = (select.booking.hoursAmount);
+    thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount);
+    thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
   }
 
   initWidgets() {
@@ -31,16 +31,12 @@ class Booking {
     thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
 
     thisBooking.dom.peopleAmount.addEventListener('updated', function() {
-      thisBooking.amount = thisBooking.amountWidget.setValue;
+     
     });
     thisBooking.dom.hoursAmount.addEventListener('updated', function() {
-      thisBooking.amount = thisBooking.amountWidget.setValue;
+      
     });
-
   }
-
-  
-
 }
 
 export default Booking;
