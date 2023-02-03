@@ -78,6 +78,7 @@ export const classNames = {
   booking: {
     loading: 'loading',
     tableBooked: 'booked',
+    tables: '.floor-plan',
   },
   nav: {
     active: 'active',
