@@ -95,7 +95,7 @@ const app = {
         /* execute initMenu method */
         thisApp.initMenu();
       });
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
+    //console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
 
   initCart: function () {

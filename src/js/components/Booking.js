@@ -175,7 +175,7 @@ class Booking {
     thisBooking.dom.allTables = thisBooking.dom.wrapper.querySelector(classNames.booking.tables);
   }
 
-    initTables(clickedTable) {
+  initTables(clickedTable) {
     const thisBooking = this;
 
     const tableId = clickedTable.getAttribute(settings.booking.tableIdAttribute);
@@ -194,12 +194,8 @@ class Booking {
         thisBooking.selectTable = tableId;
       }
     }
-      // was the table clicked?
-      //if so then was it free
-      // alert when the table is already taken
-      //if free then subscribe table number to thisBooking.selectTable and add 'selected'
-    }
-  } 
+  }
+  
   
 
   initWidgets() {
@@ -221,7 +217,7 @@ class Booking {
       thisBooking.updateDOM();
     });
 
-    thisBooking.element.addEventListener('click', function(event){
+    thisBooking.dom.wrapper.addEventListener('click', function(event){
       event.preventDefault();
       const clickedTable = event.target;
       if (clickedTable.classList.contains('table'))
@@ -229,6 +225,9 @@ class Booking {
 
     });
   }
+
+
+  
 }
 
 export default Booking;
