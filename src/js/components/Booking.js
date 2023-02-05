@@ -139,6 +139,7 @@ class Booking {
 
     for(let table of thisBooking.dom.tables){
       let tableId = table.getAttribute(settings.booking.tableIdAttribute);
+      table.classList.remove('selected');
       if(!isNaN(tableId)){
         tableId = parseInt(tableId);
       }
@@ -193,9 +194,9 @@ class Booking {
         clickedTable.classList.add('selected');
         thisBooking.selectTable = tableId;
 
-        thisBooking.dom.wrapper.addEventListener('updated', function () {
+        /*thisBooking.dom.wrapper.addEventListener('updated', function () {
           clickedTable.classList.remove('selected');
-        });
+        });*/
 
       }
     }
