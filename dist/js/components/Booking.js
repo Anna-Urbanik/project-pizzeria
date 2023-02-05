@@ -192,11 +192,15 @@ class Booking {
         }
         clickedTable.classList.add('selected');
         thisBooking.selectTable = tableId;
+
+        thisBooking.dom.wrapper.addEventListener('updated', function () {
+          clickedTable.classList.remove('selected');
+        });
+
       }
     }
-  }
-  
-  
+  } 
+
 
   initWidgets() {
     const thisBooking = this;
@@ -227,7 +231,7 @@ class Booking {
   }
 
 
-  
+
 }
 
 export default Booking;
