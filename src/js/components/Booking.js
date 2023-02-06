@@ -140,6 +140,7 @@ class Booking {
     for(let table of thisBooking.dom.tables){
       let tableId = table.getAttribute(settings.booking.tableIdAttribute);
       table.classList.remove('selected');
+      thisBooking.selectTable = null;
       if(!isNaN(tableId)){
         tableId = parseInt(tableId);
       }
@@ -229,6 +230,43 @@ class Booking {
         thisBooking.initTables(clickedTable);
 
     });
+  }
+
+  sendBooking() {
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.bookings;
+
+    const payload = {
+      date: thisBooking.date,
+      hour: thisBooking.hour,
+      table: thisBooking.tableId,
+      duration: thisBooking.hoursAmount,
+      ppl: thisBooking.peopleAmount,
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value
+    };
+    console.log('payload', payload);
+    console.log(url);
+
+    for(let starter of thisBooking.dom.starters) {
+      if(starter.checked) {
+        payload.starters.push(starter.value);
+        console.log('starters', thisBooking.dom.starters);
+      }
+    }
+    
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+      
+    fetch (url, options);
+
   }
 
 
